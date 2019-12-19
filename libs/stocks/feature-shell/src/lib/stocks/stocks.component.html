@@ -17,18 +17,19 @@
     </mat-select>
   </mat-form-field>
   <mat-form-field>
-    <input matInput [min]="fromMinDate" [max]="fromMaxDate" [matDatepicker]="pickerFrom"
-      (dateChange)="fromDateChange($event)" placeholder="From a date">
-    <mat-datepicker-toggle matSuffix [for]="pickerFrom"></mat-datepicker-toggle>
-    <mat-datepicker #pickerFrom></mat-datepicker>
+    <input matInput [min]="fromMinDate" [max]="fromMaxDate" [matDatepicker]="fromSelectedDate"
+      formControlName="fromSelectedDate" placeholder="From a date">
+    <mat-datepicker-toggle matSuffix [for]="fromSelectedDate"></mat-datepicker-toggle>
+    <mat-datepicker #fromSelectedDate></mat-datepicker>
   </mat-form-field>
   <mat-form-field>
-    <input matInput [min]="toMinDate" [max]="toMaxDate" [matDatepicker]="pickeTO" (dateChange)="toDateChange($event)"
-      placeholder="TO a date">
-    <mat-datepicker-toggle matSuffix [for]="pickeTO"></mat-datepicker-toggle>
-    <mat-datepicker #pickeTO></mat-datepicker>
+    <input matInput [min]="toMinDate" [max]="toMaxDate" [matDatepicker]="toSelectedDate" placeholder="To a date"
+      formControlName="toSelectedDate">
+    <mat-datepicker-toggle matSuffix [for]="toSelectedDate"></mat-datepicker-toggle>
+    <mat-datepicker #toSelectedDate></mat-datepicker>
   </mat-form-field>
   <button (click)="fetchQuote()" mat-raised-button>Go</button>
 </form>
 
-<coding-challenge-chart [data$]="quotes$"></coding-challenge-chart>
+<coding-challenge-chart [data$]="quotes$" [fromDate]="stockPickerForm.value.fromSelectedDate"
+  [toDate]="stockPickerForm.value.toSelectedDate"></coding-challenge-chart>
