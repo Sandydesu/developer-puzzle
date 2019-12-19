@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { PriceQueryFacade } from '@coding-challenge/stocks/data-access-price-query';
 
@@ -7,7 +7,7 @@ import { PriceQueryFacade } from '@coding-challenge/stocks/data-access-price-que
   templateUrl: './stocks.component.html',
   styleUrls: ['./stocks.component.css']
 })
-export class StocksComponent implements OnInit {
+export class StocksComponent {
   stockPickerForm: FormGroup;
   symbol: string;
   period: string;
@@ -31,8 +31,6 @@ export class StocksComponent implements OnInit {
       period: [null, Validators.required]
     });
   }
-
-  ngOnInit() {}
 
   fetchQuote() {
     if (this.stockPickerForm.valid) {

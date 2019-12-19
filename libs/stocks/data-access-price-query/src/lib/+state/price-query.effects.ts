@@ -25,11 +25,11 @@ export class PriceQueryEffects {
         return this.httpClient
           .get(
             `${this.env.apiURL}/beta/stock/${action.symbol}/chart/${
-              action.period
+            action.period
             }?token=${this.env.apiKey}`
           )
           .pipe(
-            map(resp => new PriceQueryFetched(resp as PriceQueryResponse[]))
+            map((resp: PriceQueryResponse[]) => new PriceQueryFetched(resp))
           );
       },
 
@@ -43,5 +43,5 @@ export class PriceQueryEffects {
     @Inject(StocksAppConfigToken) private env: StocksAppConfig,
     private httpClient: HttpClient,
     private dataPersistence: DataPersistence<PriceQueryPartialState>
-  ) {}
+  ) { }
 }
