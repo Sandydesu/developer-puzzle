@@ -11,7 +11,12 @@ export class StocksComponent {
   stockPickerForm: FormGroup;
   symbol: string;
   period: string;
-
+  fromMinDate = new Date(2019, 0, 1);
+  fromMaxDate = new Date();
+  toMinDate = new Date(2019, 0, 1);
+  toMaxDate = new Date();
+  fromSelectedDate = null;
+  toSelectedDate = null;
   quotes$ = this.priceQuery.priceQueries$;
 
   timePeriods = [
@@ -32,10 +37,27 @@ export class StocksComponent {
     });
   }
 
+  selectionChange() {
+    this.fetchQuote();
+  }
+
+  fromDateChange(event) {
+    this.fromSelectedDate = event.target.value;
+    this.toMinDate = new Date(event.target.value);
+  }
+
+  toDateChange(event) {
+    this.toSelectedDate = event.target.value;
+  }
+
   fetchQuote() {
     if (this.stockPickerForm.valid) {
       const { symbol, period } = this.stockPickerForm.value;
-      this.priceQuery.fetchQuote(symbol, period);
+      if (this.fromSelectedDate && this.toSelectedDate) {
+        this.priceQuery.fetchQuote(symbol, 'max');
+      } else {
+        this.priceQuery.fetchQuote(symbol, period);
+      }
     }
   }
 }

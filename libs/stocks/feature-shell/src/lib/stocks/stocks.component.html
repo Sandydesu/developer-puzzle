@@ -1,34 +1,33 @@
 <form [formGroup]="stockPickerForm">
   <mat-form-field>
-    <input
-      matInput
-      placeholder="Symbol e.g AAPL"
-      formControlName="symbol"
-      value=""
-    />
-    <mat-error
-      ><span
-        *ngIf="
+    <input matInput placeholder="Symbol e.g AAPL" formControlName="symbol" value="" />
+    <mat-error><span *ngIf="
           !stockPickerForm.get('symbol').valid &&
           stockPickerForm.get('symbol').touched
-        "
-        >Please enter a symbol</span
-      >
+        ">Please enter a symbol</span>
     </mat-error>
   </mat-form-field>
 
   <mat-form-field>
     <mat-label>Favorite time period</mat-label>
-    <mat-select formControlName="period">
-      <mat-option
-        *ngFor="let timePeriod of timePeriods"
-        [value]="timePeriod.value"
-      >
+    <mat-select formControlName="period" (selectionChange)="selectionChange()">
+      <mat-option *ngFor="let timePeriod of timePeriods" [value]="timePeriod.value">
         {{ timePeriod.viewValue }}
       </mat-option>
     </mat-select>
   </mat-form-field>
-
+  <mat-form-field>
+    <input matInput [min]="fromMinDate" [max]="fromMaxDate" [matDatepicker]="pickerFrom"
+      (dateChange)="fromDateChange($event)" placeholder="From a date">
+    <mat-datepicker-toggle matSuffix [for]="pickerFrom"></mat-datepicker-toggle>
+    <mat-datepicker #pickerFrom></mat-datepicker>
+  </mat-form-field>
+  <mat-form-field>
+    <input matInput [min]="toMinDate" [max]="toMaxDate" [matDatepicker]="pickeTO" (dateChange)="toDateChange($event)"
+      placeholder="TO a date">
+    <mat-datepicker-toggle matSuffix [for]="pickeTO"></mat-datepicker-toggle>
+    <mat-datepicker #pickeTO></mat-datepicker>
+  </mat-form-field>
   <button (click)="fetchQuote()" mat-raised-button>Go</button>
 </form>
 
