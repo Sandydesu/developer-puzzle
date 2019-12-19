@@ -32,6 +32,10 @@ export class StocksComponent {
     });
   }
 
+  selectionChange(){
+    this.fetchQuote();
+  }
+
   fetchQuote() {
     if (this.stockPickerForm.valid) {
       const { symbol, period } = this.stockPickerForm.value;
