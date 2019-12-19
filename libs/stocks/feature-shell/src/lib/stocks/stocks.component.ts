@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { PriceQueryFacade } from '@coding-challenge/stocks/data-access-price-query';
 
@@ -7,7 +7,7 @@ import { PriceQueryFacade } from '@coding-challenge/stocks/data-access-price-que
   templateUrl: './stocks.component.html',
   styleUrls: ['./stocks.component.css']
 })
-export class StocksComponent {
+export class StocksComponent implements OnInit {
   stockPickerForm: FormGroup;
   symbol: string;
   period: string;
@@ -15,9 +15,7 @@ export class StocksComponent {
   fromMaxDate = new Date();
   toMinDate = new Date(2019, 0, 1);
   toMaxDate = new Date();
-  fromSelectedDate = null;
-  toSelectedDate = null;
-  quotes$ = this.priceQuery.priceQueries$;
+  quotes$ = this.priceQuery.priceQueries$
 
   timePeriods = [
     { viewValue: 'All available data', value: 'max' },
@@ -33,7 +31,29 @@ export class StocksComponent {
   constructor(private fb: FormBuilder, private priceQuery: PriceQueryFacade) {
     this.stockPickerForm = fb.group({
       symbol: [null, Validators.required],
-      period: [null, Validators.required]
+      period: [null],
+      fromSelectedDate: [null],
+      toSelectedDate: [null]
+    });
+  }
+
+  ngOnInit() {
+    this.stockPickerForm.get('fromSelectedDate').valueChanges.subscribe((value) => {
+      if (value) {
+        this.toMinDate = new Date(value);
+        this.stockPickerForm.get('period').setValue(null);
+      }
+    });
+    this.stockPickerForm.get('toSelectedDate').valueChanges.subscribe((value) => {
+      if (value) {
+        this.stockPickerForm.get('period').setValue(null);
+      }
+    });
+    this.stockPickerForm.get('period').valueChanges.subscribe((value) => {
+      if (value) {
+        this.stockPickerForm.get('fromSelectedDate').setValue(null);
+        this.stockPickerForm.get('toSelectedDate').setValue(null);
+      }
     });
   }
 
@@ -41,19 +61,10 @@ export class StocksComponent {
     this.fetchQuote();
   }
 
-  fromDateChange(event) {
-    this.fromSelectedDate = event.target.value;
-    this.toMinDate = new Date(event.target.value);
-  }
-
-  toDateChange(event) {
-    this.toSelectedDate = event.target.value;
-  }
-
   fetchQuote() {
     if (this.stockPickerForm.valid) {
-      const { symbol, period } = this.stockPickerForm.value;
-      if (this.fromSelectedDate && this.toSelectedDate) {
+      const { symbol, period, toSelectedDate, fromSelectedDate } = this.stockPickerForm.value;
+      if (fromSelectedDate && toSelectedDate) {
         this.priceQuery.fetchQuote(symbol, 'max');
       } else {
         this.priceQuery.fetchQuote(symbol, period);
