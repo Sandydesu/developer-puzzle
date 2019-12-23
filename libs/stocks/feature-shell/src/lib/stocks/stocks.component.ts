@@ -66,7 +66,7 @@ export class StocksComponent implements OnInit {
       const { symbol, period, toSelectedDate, fromSelectedDate } = this.stockPickerForm.value;
       if (fromSelectedDate && toSelectedDate) {
         this.priceQuery.fetchQuote(symbol, 'max');
-      } else {
+      } else if (period) {
         this.priceQuery.fetchQuote(symbol, period);
       }
     }
